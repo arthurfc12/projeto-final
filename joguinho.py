@@ -18,7 +18,7 @@ YELLOW = (255, 255, 0)
 class Player1(pygame.sprite.Sprite):
     
     
-    def __init__(self):
+    def __init__(self, player_img):
         
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -38,3 +38,25 @@ class Player1(pygame.sprite.Sprite):
         # Centraliza embaixo da tela.
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
+        
+        def update(self):
+            self.rect.x += self.speedx
+            if self.rect.right > WIDTH:
+                self.rect.right = WIDTH
+            if self.rect.left < 0:
+                self.rect.left = 0
+                
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
