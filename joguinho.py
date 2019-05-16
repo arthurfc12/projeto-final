@@ -107,9 +107,13 @@ class Player2(pygame.sprite.Sprite):
         
 
                 
+def load_assets(img_dir, snd_dir):
+    assets = {}
 
-
-def game_screen(screen):            
+def game_screen(screen):
+    #carrega assets
+    assets = load_assets(img_dir, snd_dir)
+            
         
         
         
