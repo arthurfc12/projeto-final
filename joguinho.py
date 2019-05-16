@@ -127,9 +127,17 @@ class Player2(pygame.sprite.Sprite):
         
 
                 
+def load_assets(img_dir, snd_dir):
+    assets = {}
+    assets["background"] =  pygame.image.load(path.join(img_dir, 'Background.png')).convert()
 
-
-def game_screen(screen):            
+def game_screen(screen):
+    #carrega assets
+    assets = load_assets(img_dir, snd_dir)
+    
+    background = assets["background"]
+    background_rect = background.get_rect()
+            
         
         
         
