@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+#importa bibliotecas
 import pygame
 import time
 from os import path
@@ -157,7 +160,7 @@ class Player2(pygame.sprite.Sprite):
 
 
 
-                
+#carrega todos os assets                
 def load_assets(img_dir, snd_dir):
     assets = {}
     assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
@@ -189,8 +192,8 @@ def game_screen(screen):
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player1)
     all_sprites.add(player2)
-    
      
+    
         
     PLAYING = 0
     DONE = 1
@@ -200,6 +203,8 @@ def game_screen(screen):
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
+        
+            
         
         #Desenha o fundo skr
         screen.fill(BLACK)
