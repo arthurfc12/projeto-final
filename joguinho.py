@@ -21,8 +21,17 @@ YELLOW = (255, 255, 0)
 
 
 #Gravidade
-GRAV = -5
+GRAV = 5
+#Tamanho do pulo
+JUMP_SIZE = 30
+#Altura do chão
+GROUND = HEIGHT * 5 // 6
 
+
+#Estados do jogador
+STILL = 0
+JUMPING = 1
+FALLING = 2
 
 class Player1(pygame.sprite.Sprite):
     
@@ -31,6 +40,9 @@ class Player1(pygame.sprite.Sprite):
         
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
+        
+        #Estado do jogador
+        self.state = STILL
         
         # Carregando a imagem de fundo.
         self.image = player_img
@@ -48,23 +60,43 @@ class Player1(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         
-        # Velocidade da nave
+        # Velocidade do jogador
         self.speedx = 0
+        
+        #velocidade em y
+        self.speedy = 0
         
         # Melhora a colisão estabelecendo um raio de um circulo
         self.radius = 25
         
-        def update(self):
-            self.rect.x += self.speedx
-            if self.rect.right > WIDTH:
-                self.rect.right = WIDTH
-            if self.rect.left < 0:
-                self.rect.left = 0
-                
-            self.speedy -= GRAV
-            self.recty += self.speedy
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+                            
             
-
+        self.speedy += GRAV
+        # Atualiza o estado para caindo
+        if self.speedy > 0:
+            self.state = FALLING
+            self.rect.y += self.speedy
+            # Se bater no chão, para de cair
+            if self.rect.bottom > GROUND:
+                # Reposiciona para a posição do chão
+                self.rect.bottom = GROUND
+                # Para de cair
+                self.speedy = 0
+                # Atualiza o estado para parado
+                self.state = STILL
+                
+    def jump(self):
+        # Só pode pular se ainda não estiver pulando ou caindo
+        if self.state == STILL:
+            self.speedy -= JUMP_SIZE
+            self.state = JUMPING
+                
 class Player2(pygame.sprite.Sprite):
     
     
