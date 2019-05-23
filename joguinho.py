@@ -7,8 +7,8 @@ img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'snd')
 
 # Dados gerais do jogo.
-WIDTH = 480 # Largura da tela
-HEIGHT = 600 # Altura da tela
+WIDTH = 800 # Largura da tela
+HEIGHT = 450 # Altura da tela
 FPS = 60 # Frames por segundo
 
 #Cores
@@ -36,7 +36,7 @@ FALLING = 2
 class Player1(pygame.sprite.Sprite):
     
     
-    def __init__(self, player_img):
+    def __init__(self, player1img):
         
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
@@ -45,10 +45,10 @@ class Player1(pygame.sprite.Sprite):
         self.state = STILL
         
         # Carregando a imagem de fundo.
-        self.image = player_img
+        self.image = player1img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player_img, (50, 38))
+        self.image = pygame.transform.scale(player1img, (50, 38))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -100,16 +100,16 @@ class Player1(pygame.sprite.Sprite):
 class Player2(pygame.sprite.Sprite):
     
     
-    def __init__(self, player_img2):
+    def __init__(self, player2img):
         
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
-        self.image = player_img2
+        self.image = player2img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player_img2, (50, 38))
+        self.image = pygame.transform.scale(player2img, (50, 38))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -127,30 +127,92 @@ class Player2(pygame.sprite.Sprite):
         # Melhora a colisão estabelecendo um raio de um circulo
         self.radius = 25
         
-        def update(self):
-            self.rect.x += self.speedx
-            if self.rect.right > WIDTH:
-                self.rect.right = WIDTH
-            if self.rect.left < 0:
-                self.rect.left = 0
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
                 
-            self.speedy -= GRAV
-            self.recty += self.speedy
-        
+        self.speedy += GRAV
+        # Atualiza o estado para caindo
+        if self.speedy > 0:
+            self.state = FALLING
+            self.rect.y += self.speedy
+            # Se bater no chão, para de cair
+            if self.rect.bottom > GROUND:
+                # Reposiciona para a posição do chão
+                self.rect.bottom = GROUND
+                # Para de cair
+                self.speedy = 0
+                # Atualiza o estado para parado
+                self.state = STILL        
+            
+    def jump(self):
+        # Só pode pular se ainda não estiver pulando ou caindo
+        if self.state == STILL:
+            self.speedy -= JUMP_SIZE
+            self.state = JUMPING
+
+
+
 
                 
 def load_assets(img_dir, snd_dir):
     assets = {}
-    assets["background"] =  pygame.image.load(path.join(img_dir, 'Background.png')).convert()
+    assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
+    assets["player1img"] = pygame.image.load(path.join(img_dir, 'Player1.png')).convert()
+    assets["player2img"] = pygame.image.load(path.join(img_dir, 'Player2.png')).convert()
+    return assets
+
+
+
+
 
 def game_screen(screen):
     #carrega assets
     assets = load_assets(img_dir, snd_dir)
     
+    # Variável para o ajuste de velocidade
+    clock = pygame.time.Clock()
+    
+    #loada o fundo
     background = assets["background"]
     background_rect = background.get_rect()
-            
+    
+    #Cria os jogadores
+    player1 = Player1(assets["player1img"])
+    player2 = Player2(assets["player2img"])
+    
+    
+    #carrega os jogadores
+    all_sprites = pygame.sprite.Group()
+    all_sprites.add(player1)
+    all_sprites.add(player2)
+    
+     
         
+    PLAYING = 0
+    DONE = 1
+
+    state = PLAYING
+    while state != DONE:
+        
+        # Ajusta a velocidade do jogo.
+        clock.tick(FPS)
+        
+        #Desenha o fundo skr
+        screen.fill(BLACK)
+        screen.blit(background, background_rect)
+        all_sprites.draw(screen)
+
+
+        # Processa os eventos (mouse, teclado, botão, etc).
+        for event in pygame.event.get():
+
+            # Verifica se foi fechado.
+            if event.type == pygame.QUIT:
+                state = DONE
         
         
         
