@@ -204,43 +204,43 @@ def game_screen(screen):
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
+        if state == PLAYING:
+            # Processa os eventos (mouse, teclado, botão, etc).
+            for event in pygame.event.get():
+                
+                # Verifica se foi fechado.
+                if event.type == pygame.QUIT:
+                    state = DONE
             
         
         #Desenha o fundo skr
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
-
-
-        # Processa os eventos (mouse, teclado, botão, etc).
-        for event in pygame.event.get():
-
-            # Verifica se foi fechado.
-            if event.type == pygame.QUIT:
-                state = DONE
         
+        
+        #Inverte o display
+        pygame.display.flip()
+
+
+
         
         
 # Inicialização do Pygame.
-
 pygame.init()
 pygame.mixer.init()
 
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# Nome do jogo
+pygame.display.set_caption("InsFighter")
 
 # Comando para evitar travamentos.
 try:
     game_screen(screen)
 finally:
     pygame.quit()
-        
-        
-        
-        
-        
-        
         
         
         
