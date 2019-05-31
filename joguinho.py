@@ -128,6 +128,9 @@ class Player2(pygame.sprite.Sprite):
         # Velocidade da nave
         self.speedx = 0
         
+        #velocidade em y
+        self.speedy = 0
+        
         # Melhora a colisão estabelecendo um raio de um circulo
         self.radius = 25
         
@@ -212,7 +215,31 @@ def game_screen(screen):
                 # Verifica se foi fechado.
                 if event.type == pygame.QUIT:
                     state = DONE
+                    
+                # Verifica se uma tecla foi apertada    
+                if event.type == pygame.KEYDOWN:
+                    
+                    # Teclas para o player 1
+                    if event == pygame.K_w:
+                        player1.jump()
+                    if event == pygame.K_a:
+                        player1.speedx = -8
+                    if event == pygame.K_d:
+                        player1.speedx = 8
+                
+                
+                if event.type == pygame.KEYUP:      
+                    if event == pygame.K_a:
+                        player1.speedx = 0
+                    if event == pygame.K_d:
+                        player1.speedx = 0
+        
             
+        
+        
+        # Atualiza a ação de cada sprite
+        all_sprites.update()
+        
         
         #Desenha o fundo skr
         screen.fill(BLACK)
