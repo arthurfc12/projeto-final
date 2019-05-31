@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+#importa bibliotecas
 import pygame
 from os import path
 import time
@@ -7,8 +10,8 @@ img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'snd')
 
 # Dados gerais do jogo.
-WIDTH = 480 # Largura da tela
-HEIGHT = 600 # Altura da tela
+WIDTH = 600 # Largura da tela
+HEIGHT =  400 # Altura da tela
 FPS = 60 # Frames por segundo
     
 
@@ -49,7 +52,7 @@ class Player1(pygame.sprite.Sprite):
         self.image = player1img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player1img, (50, 38))
+        self.image = pygame.transform.scale(player1img, (150, 114))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -58,7 +61,7 @@ class Player1(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Centraliza embaixo da tela.
-        self.rect.centerx = WIDTH / 2
+        self.rect.left = 0 
         self.rect.bottom = HEIGHT - 10
         
         # Velocidade do jogador
@@ -110,7 +113,7 @@ class Player2(pygame.sprite.Sprite):
         self.image = player2img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player2img, (50, 38))
+        self.image = pygame.transform.scale(player2img, (150, 114))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -119,7 +122,7 @@ class Player2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Centraliza embaixo da tela.
-        self.rect.centerx = WIDTH / 2
+        self.rect.right = WIDTH 
         self.rect.bottom = HEIGHT - 10
         
         # Velocidade da nave
@@ -158,7 +161,7 @@ class Player2(pygame.sprite.Sprite):
 
 
 
-                
+#carrega todos os assets                
 def load_assets(img_dir, snd_dir):
     assets = {}
     assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
@@ -178,7 +181,7 @@ def game_screen(screen):
     clock = pygame.time.Clock()
     
     #loada o fundo
-    background = assets["background"]
+    background = pygame.transform.scale(assets["background"],(WIDTH, HEIGHT))
     background_rect = background.get_rect()
     
     #Cria os jogadores
@@ -190,8 +193,8 @@ def game_screen(screen):
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player1)
     all_sprites.add(player2)
-    
      
+    
         
     PLAYING = 0
     DONE = 1
@@ -202,29 +205,37 @@ def game_screen(screen):
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         
+        if state == PLAYING:
+            # Processa os eventos (mouse, teclado, botão, etc).
+            for event in pygame.event.get():
+                
+                # Verifica se foi fechado.
+                if event.type == pygame.QUIT:
+                    state = DONE
+            
+        
         #Desenha o fundo skr
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
-
-
-        # Processa os eventos (mouse, teclado, botão, etc).
-        for event in pygame.event.get():
-
-            # Verifica se foi fechado.
-            if event.type == pygame.QUIT:
-                state = DONE
         
+        
+        #Inverte o display
+        pygame.display.flip()
+
+
+
         
         
 # Inicialização do Pygame.
-
 pygame.init()
 pygame.mixer.init()
 
 # Tamanho da tela.
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# Nome do jogo
+pygame.display.set_caption("InsFighter")
 
 # Comando para evitar travamentos.
 try:
@@ -233,10 +244,10 @@ finally:
     pygame.quit()
         
         
-        
-        
-        
-        
-        
-        
 
+        
+        
+        
+        
+        
+ 
