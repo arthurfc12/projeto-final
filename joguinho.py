@@ -71,13 +71,13 @@ class Player1(pygame.sprite.Sprite):
         self.speedy = 0
         
         # Melhora a colisão estabelecendo um raio de um circulo
-        self.radius = 25
+        self.radius = int(self.rect.width * .85 / 2)
         
     
     def update(self):
         self.rect.x += self.speedx
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
+        if self.rect.right > WIDTH/2:
+            self.rect.right = WIDTH/2
         if self.rect.left < 0:
             self.rect.left = 0
         self.speedy += GRAV
@@ -130,14 +130,14 @@ class Player2(pygame.sprite.Sprite):
         self.speedy = 0
         
         # Melhora a colisão estabelecendo um raio de um circulo
-        self.radius = 25
+        self.radius = int(self.rect.width * .85 / 2)
         
     def update(self):
         self.rect.x += self.speedx
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
+        if self.rect.left < WIDTH/2:
+            self.rect.left = WIDTH/2
         self.speedy += GRAV
         if self.speedy > 0:
             self.state = FALLING
@@ -154,6 +154,32 @@ class Player2(pygame.sprite.Sprite):
 
 
 class Bullet1(pygame.sprite.Sprite):
+    
+    # Construtor da classe.
+    def __init__(self, x, y, bullet_img):
+        
+        # Carregando a imagem de fundo.
+        self.image = bullet1
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.bottom = y
+        self.rect.centerx = x
+        self.speedy = -10
+
+    # Metodo que atualiza a posição da navinha
+    def update(self):
+        self.rect.y += self.speedy
+        
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()
+
 
 
 
@@ -167,6 +193,10 @@ def load_assets(img_dir, snd_dir):
     assets["player2right"] = pygame.image.load(path.join(img_dir, 'Player2right.png')).convert()
     assets["crouch1left"] = pygame.image.load(path.join(img_dir, 'Crouch1left.png')).convert()
     assets["crouch1right"] = pygame.image.load(path.join(img_dir, 'Crouch1right.png')).convert()
+    assets["crouch2left"] = pygame.image.load(path.join(img_dir, 'Crouch2left.png')).convert()
+    assets["crouch2right"] = pygame.image.load(path.join(img_dir, 'Crouch2right.png')).convert()
+    assets["bullet1"] = pygame.image.load(path.join(img_dir, 'Bullet1.png')).convert() 
+    assets["bullet2"] = pygame.image.load(path.join(img_dir, 'Bullet2.png')).convert()     
     return assets
 
 
@@ -221,7 +251,7 @@ def game_screen(screen):
                     if event.key == pygame.K_a:
                         player1.speedx = -3
                     if event.key == pygame.K_d:
-                        player1.speedx = 3
+                        player1.speedx = 3    
                     if event.key == pygame.K_LEFT:
                         player2.speedx = -3
                     if event.key == pygame.K_RIGHT:
