@@ -150,7 +150,10 @@ class Player2(pygame.sprite.Sprite):
         if self.state == STILL:
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
-                
+            
+
+
+class Bullet1(pygame.sprite.Sprite):
 
 
 
@@ -160,6 +163,10 @@ def load_assets(img_dir, snd_dir):
     assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
     assets["player1img"] = pygame.image.load(path.join(img_dir, 'Player1.png')).convert()
     assets["player2img"] = pygame.image.load(path.join(img_dir, 'Player2.png')).convert()
+    assets["player1left"] = pygame.image.load(path.join(img_dir, 'Player1left.png')).convert()
+    assets["player2right"] = pygame.image.load(path.join(img_dir, 'Player2right.png')).convert()
+    assets["crouch1left"] = pygame.image.load(path.join(img_dir, 'Crouch1left.png')).convert()
+    assets["crouch1right"] = pygame.image.load(path.join(img_dir, 'Crouch1right.png')).convert()
     return assets
 
 
