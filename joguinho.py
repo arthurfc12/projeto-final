@@ -10,8 +10,8 @@ img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'snd')
 
 # Dados gerais do jogo.
-WIDTH = 600 # Largura da tela
-HEIGHT =  400 # Altura da tela
+WIDTH = 900 # Largura da tela
+HEIGHT =  600 # Altura da tela
 FPS = 60 # Frames por segundo
     
 
@@ -25,9 +25,9 @@ YELLOW = (255, 255, 0)
 
 
 #Gravidade
-GRAV = 5
+GRAV = 3
 #Tamanho do pulo
-JUMP_SIZE = 30
+JUMP_SIZE = 35
 #Altura do chão
 GROUND = HEIGHT * 5 // 6
 
@@ -45,14 +45,14 @@ class Player1(pygame.sprite.Sprite):
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
-        #Estado do jogador
+        #Inicia estado do jogador
         self.state = STILL
         
         # Carregando a imagem de fundo.
         self.image = player1img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player1img, (150, 114))
+        self.image = pygame.transform.scale(player1img, (150, 150))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -73,34 +73,30 @@ class Player1(pygame.sprite.Sprite):
         # Melhora a colisão estabelecendo um raio de um circulo
         self.radius = 25
         
+    
     def update(self):
         self.rect.x += self.speedx
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
-                            
-            
         self.speedy += GRAV
-        # Atualiza o estado para caindo
         if self.speedy > 0:
             self.state = FALLING
-            self.rect.y += self.speedy
-            # Se bater no chão, para de cair
-            if self.rect.bottom > GROUND:
-                # Reposiciona para a posição do chão
-                self.rect.bottom = GROUND
-                # Para de cair
-                self.speedy = 0
-                # Atualiza o estado para parado
-                self.state = STILL
-                
+        self.rect.y += self.speedy
+        if self.rect.bottom > GROUND:
+            self.rect.bottom = GROUND
+            self.speedy = 0
+            self.state = STILL
+    
     def jump(self):
-        # Só pode pular se ainda não estiver pulando ou caindo
         if self.state == STILL:
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
-                
+
+            
+
+
 class Player2(pygame.sprite.Sprite):
     
     
@@ -109,11 +105,13 @@ class Player2(pygame.sprite.Sprite):
          # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
+        self.state = STILL
+        
         # Carregando a imagem de fundo.
         self.image = player2img
         
         # Diminuindo o tamanho da imagem.
-        self.image = pygame.transform.scale(player2img, (150, 114))
+        self.image = pygame.transform.scale(player2img, (150, 150))
         
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -140,27 +138,19 @@ class Player2(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
-                
         self.speedy += GRAV
-        # Atualiza o estado para caindo
         if self.speedy > 0:
             self.state = FALLING
-            self.rect.y += self.speedy
-            # Se bater no chão, para de cair
-            if self.rect.bottom > GROUND:
-                # Reposiciona para a posição do chão
-                self.rect.bottom = GROUND
-                # Para de cair
-                self.speedy = 0
-                # Atualiza o estado para parado
-                self.state = STILL        
-            
+        self.rect.y += self.speedy
+        if self.rect.bottom > GROUND:
+            self.rect.bottom = GROUND
+            self.speedy = 0
+            self.state = STILL
     def jump(self):
-        # Só pode pular se ainda não estiver pulando ou caindo
         if self.state == STILL:
             self.speedy -= JUMP_SIZE
             self.state = JUMPING
-
+                
 
 
 
@@ -168,10 +158,8 @@ class Player2(pygame.sprite.Sprite):
 def load_assets(img_dir, snd_dir):
     assets = {}
     assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
-    assets["player1img"] = pygame.image.load(path.join(img_dir, 'stand.png')).convert()
+    assets["player1img"] = pygame.image.load(path.join(img_dir, 'Player1.png')).convert()
     assets["player2img"] = pygame.image.load(path.join(img_dir, 'Player2.png')).convert()
-    assets["player1crouch"] = pygame.image.load(path.join(img_dir, 'crouch.png')).convert()
-    #assets["player2dcrouch"] = pygame.image.load(path.join(img_dir, '')).convert()
     return assets
 
 
@@ -219,22 +207,31 @@ def game_screen(screen):
                     state = DONE
                     
                 # Verifica se uma tecla foi apertada    
-                if event.type == pygame.KEYDOWN:
-                    
+                if event.type == pygame.KEYDOWN :
                     # Teclas para o player 1
-                    if event == pygame.K_w:
+                    if event.key == pygame.K_w:
                         player1.jump()
-                    if event == pygame.K_a:
-                        player1.speedx = -8
-                    if event == pygame.K_d:
-                        player1.speedx = 8
+                    if event.key == pygame.K_a:
+                        player1.speedx = -3
+                    if event.key == pygame.K_d:
+                        player1.speedx = 3
+                    if event.key == pygame.K_LEFT:
+                        player2.speedx = -3
+                    if event.key == pygame.K_RIGHT:
+                        player2.speedx = 3
+                    if event.key == pygame.K_UP:
+                        player2.jump()
                 
                 
-                if event.type == pygame.KEYUP:      
-                    if event == pygame.K_a:
+                if event.type == pygame.KEYUP:                  
+                    if event.key == pygame.K_a:
                         player1.speedx = 0
-                    if event == pygame.K_d:
+                    if event.key == pygame.K_d:
                         player1.speedx = 0
+                    if event.key == pygame.K_LEFT:
+                        player2.speedx = 0
+                    if event.key == pygame.K_RIGHT:
+                        player2.speedx = 0
         
             
         
