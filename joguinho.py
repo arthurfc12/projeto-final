@@ -168,8 +168,10 @@ class Player2(pygame.sprite.Sprite):
 def load_assets(img_dir, snd_dir):
     assets = {}
     assets["background"] = pygame.image.load(path.join(img_dir, 'Background.png')).convert()
-    assets["player1img"] = pygame.image.load(path.join(img_dir, 'Player1.png')).convert()
+    assets["player1img"] = pygame.image.load(path.join(img_dir, 'stand.png')).convert()
     assets["player2img"] = pygame.image.load(path.join(img_dir, 'Player2.png')).convert()
+    assets["player1crouch"] = pygame.image.load(path.join(img_dir, 'crouch.png')).convert()
+    #assets["player2dcrouch"] = pygame.image.load(path.join(img_dir, '')).convert()
     return assets
 
 
