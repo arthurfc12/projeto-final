@@ -259,6 +259,10 @@ def game_screen(screen):
     bullets1 = pygame.sprite.Group()
     bullets2 = pygame.sprite.Group()
     
+    
+    lives1 = 3
+    lives2 = 3
+    
         
     PLAYING = 0
     DONE = 1
@@ -324,6 +328,27 @@ def game_screen(screen):
         # Atualiza a ação de cada sprite
         all_sprites.update()
         
+        if state == PLAYING:
+            
+            hits1 = pygame.sprite.spritecollide(player2, bullets1, False, pygame.sprite.collide_circle) 
+            hits2 = pygame.sprite.spritecollide(player1, bullets2, False, pygame.sprite.collide_circle)
+            
+            if hits1:
+                lives2 -= 1
+                
+                if lives2 == 0:
+                    state = DONE
+                else:
+                    state = PLAYING
+            
+            if hits2:
+                lives1 -= 1
+                
+                if lives1 == 0:
+                    state = DONE
+                else:
+                    state = PLAYING
+                
         
         #Desenha o fundo skr
         screen.fill(BLACK)
