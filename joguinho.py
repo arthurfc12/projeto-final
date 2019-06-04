@@ -170,7 +170,7 @@ class Bullet1(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Coloca no lugar inicial definido em x, y do constutor
-        self.rect.bottom = y
+        self.rect.centery = y
         self.rect.centerx = x
         self.speedx = 10
 
@@ -200,7 +200,7 @@ class Bullet2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Coloca no lugar inicial definido em x, y do constutor
-        self.rect.bottom = y
+        self.rect.centery = y
         self.rect.centerx = x
         self.speedx = -10
 
