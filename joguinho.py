@@ -156,7 +156,9 @@ class Player2(pygame.sprite.Sprite):
 class Bullet1(pygame.sprite.Sprite):
     
     # Construtor da classe.
-    def __init__(self, x, y, bullet_img):
+    def __init__(self, x, y, bullet1):
+        
+        pygame.sprite.Sprite.__init__(self)
         
         # Carregando a imagem de fundo.
         self.image = bullet1
@@ -170,17 +172,45 @@ class Bullet1(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.bottom = y
         self.rect.centerx = x
-        self.speedy = -10
+        self.speedx = 10
 
     # Metodo que atualiza a posição da navinha
     def update(self):
-        self.rect.y += self.speedy
+        self.rect.x += self.speedx
         
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
 
 
+class Bullet2(pygame.sprite.Sprite):
+    
+    # Construtor da classe.
+    def __init__(self, x, y, bullet2):
+        
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        self.image = bullet2
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.bottom = y
+        self.rect.centerx = x
+        self.speedx = -10
+
+    # Metodo que atualiza a posição da navinha
+    def update(self):
+        self.rect.x += self.speedx
+        
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()
 
 
 #carrega todos os assets                
@@ -223,7 +253,11 @@ def game_screen(screen):
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player1)
     all_sprites.add(player2)
-     
+    
+    #Classe para tiros 1 e 2
+    
+    bullets1 = pygame.sprite.Group()
+    bullets2 = pygame.sprite.Group()
     
         
     PLAYING = 0
@@ -251,20 +285,34 @@ def game_screen(screen):
                     if event.key == pygame.K_a:
                         player1.speedx = -3
                     if event.key == pygame.K_d:
-                        player1.speedx = 3    
+                        player1.speedx = 3 
+                    if event.key == pygame.K_v:
+                        bulleta = Bullet1(player1.rect.centerx, player1.rect.top, assets["bullet1"])
+                        all_sprites.add(bulleta)
+                        bullets1.add(bulleta)
+                        
+                    #Teclas para player 2    
                     if event.key == pygame.K_LEFT:
                         player2.speedx = -3
                     if event.key == pygame.K_RIGHT:
                         player2.speedx = 3
                     if event.key == pygame.K_UP:
                         player2.jump()
+                    if event.key == pygame.K_m:
+                        bulletb = Bullet2(player2.rect.centerx, player2.rect.top, assets["bullet2"])
+                        all_sprites.add(bulletb)
+                        bullets2.add(bulletb)    
                 
                 
                 if event.type == pygame.KEYUP:                  
+                    
+                    #Solta 1
                     if event.key == pygame.K_a:
                         player1.speedx = 0
                     if event.key == pygame.K_d:
                         player1.speedx = 0
+                        
+                    #Solta 2    
                     if event.key == pygame.K_LEFT:
                         player2.speedx = 0
                     if event.key == pygame.K_RIGHT:
